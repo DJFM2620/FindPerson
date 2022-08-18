@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">FindPerson</string>
+    <string name="img_descp">Imagen de la persona</string>
+    <string name="person_name">Nombre de la Persona</string>
+    <string name="add_Person">Añadir Persona</string>
+    <string name="save_person">Guardar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="helper_required">Requerido</string>
+    <string name="person_height">Altura de la Persona</string>
+    <string name="person_weight">Peso de la Persona</string>
+    <string name="person_age">Edad de la Persona</string>
+    <string name="button_save">GUARDAR</string>
+    <string name="person_title_add">Registrar Persona</string>
+    <string name="person_title_update">Actualizar Datos</string>
+    <string name="person_saved">Persona Registrada Exitosamente...!!</string>
+    <string name="person_updated">Datos de la Persona han sido Actualizados Exitosamente...!!</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="button_login">Login</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_email">Email</string>
+    <string name="login_tittle">LOGIN</string>
+    <string name="text_create_an_account">Crea tu cuenta</string>
+    <string name="hint_confirm_password">Confirmar Contraseña</string>
+    <string name="text_terms_and_conditions">Terminos y condiciones</string>
+    <string name="btn_register">REGISTRAR</string>
+    <string name="text_already_have_an_account">Ya tienes una cuenta? Ingresa</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_surname">Apellido</string>
+    <string name="hint_phone">Celular</string>
+    <string name="person_direction">Direccion</string>
+</resources>

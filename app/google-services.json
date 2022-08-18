@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "502613108902",
+    "project_id": "findperson-59595",
+    "storage_bucket": "findperson-59595.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502613108902:android:158e8aa13ad348309bac67",
+        "android_client_info": {
+          "package_name": "pe.idat.findperson"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "502613108902-shl6v8a6kskfou3h0hegeikerph01b0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd9_krKOQotbwFqXpO7JxFwd-fXZdCVOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502613108902-shl6v8a6kskfou3h0hegeikerph01b0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
