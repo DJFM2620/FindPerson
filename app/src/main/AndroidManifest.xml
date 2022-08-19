@@ -28,6 +28,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.FindPerson" />
         <activity
@@ -43,5 +44,13 @@
             </intent-filter>
         </activity>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:host="https"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+        </intent>
+    </queries>
 
 </manifest>

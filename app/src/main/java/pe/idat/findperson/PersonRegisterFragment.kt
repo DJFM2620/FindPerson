@@ -25,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.snackbar.Snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.findperson.databinding.FragmentRegisterPersonBinding
@@ -35,10 +34,11 @@ import java.util.*
 class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mBinding: FragmentRegisterPersonBinding
-    private lateinit var mContext: Context
     private lateinit var map: GoogleMap
+    private lateinit var communicator: Communicator
 
     private var mActivity:MainActivity? = null
+    private var mHome = HomeFragment()
     private var mPersonEntity: PersonEntity? = null
     private var mIsEditMode:Boolean = false
     private var imageUri: Uri? = null
@@ -54,6 +54,8 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
 
         val supportMapFragment = childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment?
         supportMapFragment!!.getMapAsync(this)
+
+        communicator = activity as Communicator
 
         return mBinding.root
     }
@@ -72,7 +74,7 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
             callPersonDb(personId)
             mPersonEntity?.personId
             mIsEditMode = true
-            Snackbar.make(mBinding.root, "$personId", Snackbar.LENGTH_SHORT).show()
+            //Snackbar.make(mBinding.root, "$personId", Snackbar.LENGTH_SHORT).show()
         }
         actionBar()
 
@@ -91,6 +93,8 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
     //Para ejecutar eventos dentro del menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        val fragment = HomeFragment()
+
         return when(item.itemId){
 
             android.R.id.home -> {
@@ -102,8 +106,10 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
                 //Boton menu save
                 if(mIsEditMode){
                     updatePerson()
+                    communicator.startFragment(fragment)
                 }else{
                     registerPerson()
+                    communicator.startFragment(fragment)
                 }
                 true
             }
@@ -116,8 +122,6 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
 
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)//Flecha de retroceso
         mActivity?.supportActionBar?.title = getString(R.string.app_name)//Titulo
-
-        mActivity?.mBinding?.fabNewPerson?.show()
 
         super.onDestroy()
     }
@@ -250,31 +254,6 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
                     ImageController.saveImage(mActivity?.baseContext!!,personId, data)
                 }
             }
-
-            /*if (data != null) {
-
-                Log.d("MENSAJEEEEEEEEEEEEEEEEEEEEEEEEEE", "DATA ---> $data" +
-                        "\nDATA-PATH ---> ${data.path}" +
-                        "\nFILE FROM URI ---> ${getFileFromUri(requireActivity(), data)}" +
-                        //"\nFILE TO BASE64 ---> ${file2Base64(getFileFromUri(requireActivity(), data))}" +
-                        "\nBITMAP ---> ${convertBase64ToBitmap(file2Base64(getFileFromUri(requireActivity(), data)))}" +
-                        "\nDRAWABLE IMG VIEW ---> ${mBinding.imgView.drawable}")
-
-                activity?.let {
-                    Glide.with(it)
-                        .load(convertBase64ToBitmap(file2Base64(getFileFromUri(requireActivity(), data))))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .into(mBinding.imgView)
-                }
-
-                //mBinding.imgView.setImageBitmap(convertBase64ToBitmap(file2Base64(getFileFromUri(requireActivity(), data))))
-
-                val myDrawable: Drawable = mBinding.imgView.drawable
-                val myBitmap: Bitmap = myDrawable.toBitmap()
-
-                Log.d("MENSAJEEEEEEEEEEEEEEEEEEEEEEEEE", "\nDRAWABLE TO BITMAP ---> $myBitmap")
-            }*/
         }
     }
 
@@ -305,32 +284,12 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
                         mPersonEntity?.personId?.let { ImageController.getImageUri(requireActivity(), it) }
 
                     imgView.setImageURI(imageUri)
-
-                    /*activity?.let {
-                        Glide.with(it)
-                            .load(mPersonEntity?.photo)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .centerCrop()
-                            .into(mBinding.imgView)
-                    }*/
-
-                    //val myDrawable: Drawable = image.getDrawable()
-                    //val myBitmap: Bitmap = myDrawable.getBitmap()
-
-                    /*Glide.with(mContext)
-                        .load(convertBase64ToBitmap())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .into(holder.binding.ivImage)*/
                 }
             }
         }
     }
 
     private fun updatePerson(){
-
-        //val myDrawable: Drawable = mBinding.imgView.drawable
-        //val myBitmap: Bitmap = myDrawable.toBitmap()
 
         imageUri?.let {
             ImageController.saveImage(requireActivity(),mPersonEntity!!.personId , it)
@@ -349,9 +308,8 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
 
             uiThread {
                 hideKeyboard()
-                mActivity?.updateMemory(person)
-                Snackbar.make(mBinding.root, getString(R.string.person_updated), Snackbar.LENGTH_SHORT).show()
-                mActivity?.onBackPressed()
+                mHome.updateMemory(person)
+                Toast.makeText(activity, getString(R.string.person_updated), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -377,9 +335,8 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
             uiThread {
 
                 hideKeyboard()
-                mActivity?.insertMemory(person)
-                Snackbar.make(mBinding.root, getString(R.string.person_saved), Snackbar.LENGTH_SHORT).show()
-                mActivity?.onBackPressed()
+                mHome.insertMemory(person)
+                Toast.makeText(activity, getString(R.string.person_saved), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -402,111 +359,6 @@ class PersonRegisterFragment : Fragment(), OnMapReadyCallback {
             }
         setHasOptionsMenu(true)
     }
-
-    /*
-    private fun getFileFromUri(context: Context, uri: Uri?): File? {
-        uri ?: null
-        uri?.path ?: null
-
-        var newUriString = uri.toString()
-        newUriString = newUriString.replace(
-            "content://com.android.providers.downloads.documents/",
-            "content://com.android.providers.media.documents/"
-        )
-        newUriString = newUriString.replace(
-            "/msf%3A", "/image%3A"
-        )
-        val newUri = Uri.parse(newUriString)
-
-        var realPath = String()
-        val databaseUri: Uri
-        val selection: String?
-        val selectionArgs: Array<String>?
-        if (newUri.path?.contains("/document/image:") == true) {
-            databaseUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            selection = "_id=?"
-            selectionArgs = arrayOf(DocumentsContract.getDocumentId(newUri).split(":")[1])
-        } else {
-            databaseUri = newUri
-            selection = null
-            selectionArgs = null
-        }
-        try {
-            val column = "_data"
-            val projection = arrayOf(column)
-            val cursor = context.contentResolver.query(
-                databaseUri,
-                projection,
-                selection,
-                selectionArgs,
-                null
-            )
-            cursor?.let {
-                if (it.moveToFirst()) {
-                    val columnIndex = cursor.getColumnIndexOrThrow(column)
-                    realPath = cursor.getString(columnIndex)
-                }
-                cursor.close()
-            }
-        } catch (e: Exception) {
-            Log.i("GetFileUri Exception:", e.message ?: "")
-        }
-        val path = realPath.ifEmpty {
-            when {
-                newUri.path?.contains("/document/raw:") == true -> newUri.path?.replace(
-                    "/document/raw:",
-                    ""
-                )
-                newUri.path?.contains("/document/primary:") == true -> newUri.path?.replace(
-                    "/document/primary:",
-                    "/storage/emulated/0/"
-                )
-                else -> return null
-            }
-        }
-        return if (path.isNullOrEmpty()) null else File(path)
-    }
-
-    private fun convertBase64ToBitmap(b64: String?): Bitmap? {
-
-        val imageAsBytes = Base64.decode(b64?.toByteArray(), Base64.DEFAULT)
-
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size)
-    }
-
-    private fun file2Base64(filePath: File?): String? {
-        var fis: FileInputStream? = null
-        var base64String = ""
-        val bos = ByteArrayOutputStream()
-
-        try {
-            fis = FileInputStream(filePath)
-            val buffer = ByteArray(1024 * 100)
-            var count = 0
-            while (fis.read(buffer).also { count = it } != -1) {
-                bos.write(buffer, 0, count)
-            }
-            fis.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        base64String = Base64.encodeToString(bos.toByteArray(), Base64.DEFAULT)
-
-        Snackbar.make(mBinding.root, "El Base64 es: ${base64String.toString()}", Snackbar.LENGTH_SHORT).show()
-
-        return base64String
-    }
-
-    private fun stringToBitMap(encodedString: String?): Bitmap? {
-        return try {
-            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-        } catch (e: java.lang.Exception) {
-            e.message
-            null
-        }
-    }
-    */
 
     @SuppressLint("UseRequireInsteadOfGet")
     private fun hideKeyboard(){

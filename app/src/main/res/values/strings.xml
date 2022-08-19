@@ -37,4 +37,9 @@
     <string name="hint_surname">Apellido</string>
     <string name="hint_phone">Celular</string>
     <string name="person_direction">Direccion</string>
+    <string name="profile_title">Perfil</string>
+    <string name="home_title">Home</string>
+    <string name="hint_code">Codigo</string>
+    <string name="btn_update">ACTUALIZAR</string>
+    <string name="statistics_title">Estadisticas</string>
 </resources>

@@ -44,9 +44,10 @@ def anko_version= "0.10.8"
 
 dependencies {
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
     /*==========================================*/
     /* RETROFIT */
-
     implementation 'io.reactivex:rxjava:1.1.6'
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'

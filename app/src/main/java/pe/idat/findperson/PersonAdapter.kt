@@ -1,7 +1,6 @@
 package pe.idat.findperson
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,8 +57,6 @@ class PersonAdapter(private var itemPersons:MutableList<PersonEntity>,
 
             binding.imgPhoto.setImageURI(imageUri)
         }
-        Log.d("MENSAJEEEEEEEEEEEEEEEEEE", "SE VUELVE A CARGAR")
-        Log.d("MENSAJEEEEEEEEEEEEEEEEEE", "=========================")
     }
 
     override fun getItemCount(): Int {
